@@ -13,7 +13,7 @@ function* loadStarWarsRequest({payload}){
             const starWarsList1Character1 = yield [call(StarWarsAPICharactersService, starWarsList[0].data.results[i].characters[0])];
             const starWarsList1Character2 = yield [call(StarWarsAPICharactersService, starWarsList[0].data.results[i].characters[1])];
             const starWarsList1Character3 = yield [call(StarWarsAPICharactersService, starWarsList[0].data.results[i].characters[2])];
-            var movieDetailss = new movieDetails(
+            var movieDetailsValue = new movieDetails(
                 starWarsList[0].data.results[i].episode_id,
                 starWarsList[0].data.results[i].title,
                 starWarsList[0].data.results[i].director,                
@@ -22,7 +22,7 @@ function* loadStarWarsRequest({payload}){
                 starWarsList1Character3[0].data.name,
                 starWarsList[0].data.results[i].opening_crawl,
             );
-            starwarslistValues.push(movieDetailss);
+            starwarslistValues.push(movieDetailsValue);
         }          
         yield put(loadStarWarsListSuccess(starwarslistValues));
         yield put(stopLoading());

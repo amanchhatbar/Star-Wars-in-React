@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.17.1",
     "chart.js": "^2.6.0",
     "immutable": "^3.8.1",
-    "primereact": "^1.0.0-beta.6",
+    "primereact": "^1.4.0",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-bootstrap": "^0.31.2",

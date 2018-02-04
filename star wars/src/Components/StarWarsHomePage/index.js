@@ -12,16 +12,22 @@ import {Dialog} from 'primereact/components/dialog/Dialog';
 import {Button} from 'primereact/components/button/Button';
 import {Chart} from 'primereact/components/chart/Chart';
 import {CustomDialog} from './CustomDialog';
+import MovieTitleDialog from '../StarWarsMovieTitleDialog/MovieTitleDialog';
 
 class StarWarsHomePage extends React.Component{
     constructor(props){
         super(props);
         this.state = {
           testing:10,
-          dialogVisible:false,          
+          visible:false,
+          titleDialogVisible: false,
+          titleVisible:false,
+          starWarsSingleValue:[],
+          StarMoviesTitle:[]          
         };
         this.onClick = this.onClick.bind(this);
         this.onHide = this.onHide.bind(this);
+        this.onHideTitleDialog = this.onHideTitleDialog.bind(this);
     }
     componentDidMount(){
         this.callLoadStarWarsList();
@@ -33,9 +39,11 @@ class StarWarsHomePage extends React.Component{
         });
     }
 
+   
+
     displayStarWarsList(starWarsList){
         return(
-            <StarWarsCardDisplay starwarslist = {starWarsList} />
+            <StarWarsCardDisplay starwarslist = {starWarsList} movieTitleDialog = {this.movieTitleDialog}/>
         );
     }
 
@@ -64,10 +72,15 @@ class StarWarsHomePage extends React.Component{
     }
     onClick(event) {
         this.setState({visible: true});
+        //this.setState({titleDialogVisible : true});
     }
 
     onHide(event) {
         this.setState({visible: false});
+    }
+
+    onHideTitleDialog(event) {
+        this.setState({titleDialogVisible: false});
     }
     showModal(){
         return (
@@ -100,11 +113,23 @@ class StarWarsHomePage extends React.Component{
     chartDisplayValues(starWarsList){        
         if(this.props.starWarsList)  {
             let data = {
-                labels: [this.props.starWarsList[0].title, this.props.starWarsList[1].title, this.props.starWarsList[2].title, this.props.starWarsList[3].title, this.props.starWarsList[4].title, this.props.starWarsList[5].title, this.props.starWarsList[6].title],
+                labels: [this.props.starWarsList[0].title, 
+                this.props.starWarsList[1].title, 
+                this.props.starWarsList[2].title, 
+                this.props.starWarsList[3].title, 
+                this.props.starWarsList[4].title, 
+                this.props.starWarsList[5].title, 
+                this.props.starWarsList[6].title],
                 datasets: [
                     {
                         label: 'Star Wars Crawl Length',
-                        data: [this.props.starWarsList[0].opening_crawl.length, this.props.starWarsList[1].opening_crawl.length, this.props.starWarsList[2].opening_crawl.length, this.props.starWarsList[3].opening_crawl.length, this.props.starWarsList[4].opening_crawl.length, this.props.starWarsList[5].opening_crawl.length, this.props.starWarsList[6].opening_crawl.length],
+                        data: [this.props.starWarsList[0].opening_crawl.length, 
+                        this.props.starWarsList[1].opening_crawl.length, 
+                        this.props.starWarsList[2].opening_crawl.length, 
+                        this.props.starWarsList[3].opening_crawl.length, 
+                        this.props.starWarsList[4].opening_crawl.length, 
+                        this.props.starWarsList[5].opening_crawl.length, 
+                        this.props.starWarsList[6].opening_crawl.length],
                         // fill: false,
                         borderColor: '#4bc0c0'
                     },                   
@@ -114,17 +139,38 @@ class StarWarsHomePage extends React.Component{
         }
     }
 
+    movieTitleDialog = (starWarSingle) => {
+        this.setState(
+            {
+                starWarsSingleValue: starWarSingle,
+                titleDialogVisible : true,
+                StarMoviesTitle: starWarSingle.title
+            });
+    }
+
+    StarWarsListTitleDisplay(){
+        if(this.state.starWarsSingleValue)  {
+           return <MovieTitleDialog starWarsSingleValues = {this.state.starWarsSingleValue}/> 
+        }
+        return null;
+    }
     render()
     {
         let footer = <div>       
         <Button label="Close" onClick={this.onHide} />
         </div>;
+        let displayTitleFooter = <div>
+            <Button label = "Close" onClick = {this.onHideTitleDialog} />
+        </div>
         return(
             <div>                      
                 {this.printResults()}
                 <StarWarsLoading show = {this.props.loading} />
-                <CustomDialog header="Star Wars Crawl Length Per Movie" visible={this.state.visible} width="1000px" modal={true} footer={footer}>
+                <CustomDialog header="Star Wars Crawl Length Per Movie" visible={this.state.visible} width="1000px" modal={true} footer={footer} onHide={this.onHide}>
                    <div> {this.chartDisplayValues()} </div>
+                </CustomDialog>
+                <CustomDialog header={this.state.StarMoviesTitle} visible={this.state.titleDialogVisible} width="1000px" modal={true} onHide={this.onHideTitleDialog} footer ={displayTitleFooter}>
+                   <div>{this.StarWarsListTitleDisplay()}</div>
                 </CustomDialog>
             </div>
         );

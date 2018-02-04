@@ -1,4 +1,10 @@
 .img{    
     height: 180px;
     width: 150px;
+    cursor:pointer;
+	cursor:hand;
+}
+.imgTitle{
+    height: 260px;
+    width: 180px;
 }
